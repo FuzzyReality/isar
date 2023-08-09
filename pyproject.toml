@@ -1,9 +1,59 @@
-[build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "setuptools_scm>=6.2"
-]
-build-backend = "setuptools.build_meta"
+[tool.poetry]
+name = "isar"
+version = "0.1.0"
+description = "Integration and Supervisory control of Autonomous Robots"
+authors = ["Equinor ASA <fg_robots_dev@equinor.com>"]
+readme = "README.md"
+repository = "https://github.com/equinor/isar"
+classifiers = [
+        "Environment :: Other Environment",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
+        "Programming Language :: Python",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Physics",
+        "Topic :: Software Development :: Libraries",
+    ]
 
-[tool.setuptools_scm]
+[tool.poetry.dependencies]
+python = "^3.9"
+alitra = ">=1.1.0"
+azure-identity = "^1.14.0"
+azure-keyvault-secrets = "^4.7.0"
+azure-storage-blob = "^12.17.0"
+backoff = "^2.2.1"
+click = "^8.1.6"
+dacite = "^1.8.1"
+fastapi-azure-auth = "4.0.0"
+fastapi = "^0.101.0"
+injector = "^0.21.0"
+opencensus-ext-logging = "^0.1.1"
+opencensus-ext-requests = "^0.8.0"
+opencensus-ext-azure = "^1.1.9"
+numpy = "^1.25.2"
+paho-mqtt = "^1.6.1"
+pydantic = "1.10.11"
+PyJWT = "^2.8.0"
+python-dotenv = "^1.0.0"
+PyYAML = "^6.0.1"
+requests-toolbelt = "^1.0.0"
+requests = "^2.31.0"
+transitions = "^0.9.0"
+uvicorn = "^0.23.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+flake8 = "^6.1.0"
+mypy = "^1.4.1"
+myst-parser = "^2.0.0"
+pre-commit = "^3.3.3"
+pytest-dotenv = "^0.5.2"
+pytest-mock = "^3.11.1"
+pytest-xdist = "^3.3.1"
+pytest = "^7.4.0"
+requests-mock = "^1.11.0"
+Sphinx = "^7.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
