@@ -1,24 +1,56 @@
 name: Upload Python Package
 
+# This is an adaptation of https://github.com/code-specialist/pypi-poetry-publish.
+# That action is released under an MIT License, and as such, so is this workflow.
+
 on:
+  workflow_dispatch:
   release:
     types: [created]
+
+
+env:
+  PUBLISH_REGISTRY: https://test.pypi.org/simple
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Install poetry
+        run: |
+          pipx install poetry
+
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.x"
+
+      - name: Set GitHub Tag as Package Version
+        run: |
+          sed -i -r 's/__version__ *= *".*"/__version__ = "${{ github.event.release.tag_name }}"/g' ./src/__init__.py
+          sed -i '0,/version =.*/s//version = "'"${{ github.event.release.tag_name }}"'"/' ./pyproject.toml
+        shell: bash
+
+
+      - name: Add and Commit Version
+        run: |
+          git add ./src/__init__.py ./pyproject.toml
+          git config --global user.name "PyPI Poetry Publish Bot"
+          git config --global user.email "fg_robots_dev@equinor.com"
+          git commit -m "Change version to ${{ github.event.release.tag_name }}" --allow-empty
+          git push origin HEAD
+        shell: bash
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install --upgrade build
-          python -m pip install --upgrade twine
-      - name: Build and publish
+          poetry config virtualenvs.options.no-pip true
+          poetry config virtualenvs.options.no-setuptools true
+          poetry install --no-root
+
+      - name: Build and Publish
         run: |
-          python -m build
-          python -m twine upload --verbose --skip-existing -p ${{ secrets.PYPI_TOKEN }} -u __token__ dist/*
+          poetry config repositories.publish $PUBLISH_REGISTRY
+#          poetry publish -p ${{ secrets.PYPI_TOKEN }} -u __token__ -r publish --build
+        shell: bash
