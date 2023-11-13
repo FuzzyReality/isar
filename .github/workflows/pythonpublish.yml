@@ -15,8 +15,13 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: testing
+        run: echo "${{ github.event.release.tag_name }}" > "$GITHUB_OUTPUT"
 
       - name: Install poetry
         run: |
