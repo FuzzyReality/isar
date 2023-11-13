@@ -15,8 +15,15 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      Release_Tag: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: testing
+        run: echo "$Release_Tag"
 
       - name: Install poetry
         run: |
@@ -40,7 +47,7 @@ jobs:
           git config --global user.name "PyPI Poetry Publish Bot"
           git config --global user.email "fg_robots_dev@equinor.com"
           git commit -m "Change version to ${{ github.event.release.tag_name }}" --allow-empty
-          git push origin HEAD
+          git push origin HEAD:main
         shell: bash
 
       - name: Install dependencies
