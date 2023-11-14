@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "isar"
-version = "1.16.8"
+version = "v0.0.10"
 description = "Integration and Supervisory control of Autonomous Robots"
 authors = ["Equinor ASA <fg_robots_dev@equinor.com>"]
 readme = ["README.md", "LICENSE"]
