@@ -6,19 +6,21 @@ ENV VIRTUAL_ENV=/venv
 RUN python -m venv --copies $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-RUN python -m pip install --upgrade pip
+# ----> Consider no dev deps and --no-ansi. --no-interaction?
+RUN pipx install poetry
 
-# Install dependencies before ISAR to cache pip installation
+# Install dependencies before ISAR to cache poetry installation
 RUN mkdir -p src
-COPY setup.py README.md ./
-RUN pip install .
+COPY pyproject.toml poetry.lcok README.md ./
+RUN poetry install --no-ansi --no-interaction --only main
 
 # Install the base isar-robot package
 RUN pip install isar-robot
 
 COPY . .
 
-RUN pip install .
+# Do we need to add anything here for poetry? for instance COPY pyproject.toml and poetry.lock?
+RUN poetry install
 
 EXPOSE 3000
 

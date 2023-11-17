@@ -15,8 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.x"] # pythonpublish.yml uses "3.x".
 
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +28,7 @@ jobs:
 
       - name: Install poetry
         run: |
-          python -m pip install poetry
+          pipx install poetry==${{ POETRY_VERSION }}
       
       - name: Configure Poetry
         run: |
